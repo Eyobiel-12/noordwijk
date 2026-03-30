@@ -72,11 +72,11 @@ export function Footer() {
             <ul className="space-y-3 sm:space-y-4">
               <li>
                 <a 
-                  href="tel:0712032521" 
+                  href="tel:+31651355417" 
                   className="flex items-center gap-3 text-background/60 hover:text-secondary transition-colors text-sm py-1 touch-manipulation"
                 >
                   <Phone className="w-4 h-4" />
-                  071 20 32 521
+                  +31 6 51355417
                 </a>
               </li>
               <li>

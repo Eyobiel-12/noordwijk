@@ -56,7 +56,7 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            <a href="tel:0712032521">
+            <a href="tel:+31651355417">
               <Button
                 variant="outline"
                 size="sm"
@@ -66,7 +66,7 @@ export function Header() {
                 )}
               >
                 <Phone className="h-4 w-4" />
-                071 20 32 521
+                +31 6 51355417
               </Button>
             </a>
           </div>
@@ -104,14 +104,14 @@ export function Header() {
             </Link>
           ))}
           <div className="flex flex-col gap-3 mt-4">
-            <a href="tel:0712032521">
+            <a href="tel:+31651355417">
               <Button className="w-full gap-2 bg-primary text-primary-foreground h-12 text-base">
                 <Phone className="h-5 w-5" />
-                071 20 32 521
+                +31 6 51355417
               </Button>
             </a>
             <a 
-              href="https://wa.me/31616719266?text=Hallo%2C%20ik%20heb%20een%20vraag%20over%20meubelstoffering."
+              href="https://wa.me/31651355417?text=Hallo%2C%20ik%20heb%20een%20vraag%20over%20meubelstoffering."
               target="_blank"
               rel="noopener noreferrer"
             >

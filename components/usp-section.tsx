@@ -82,12 +82,12 @@ export function USPSection() {
                 Wij denken graag met u mee over de mogelijkheden
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <a href="tel:0712032521">
+                <a href="tel:+31651355417">
                   <Button 
                     size="lg" 
                     className="w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/90 h-12 sm:h-11 text-sm sm:text-base touch-manipulation"
                   >
-                    071 20 32 521
+                    +31 6 51355417
                   </Button>
                 </a>
                 <Link href="#contact">

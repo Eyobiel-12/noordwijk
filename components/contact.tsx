@@ -11,14 +11,14 @@ const contactInfo = [
   {
     icon: Phone,
     label: "Telefoon",
-    value: "071 20 32 521",
-    href: "tel:0712032521",
+    value: "+31 6 51355417",
+    href: "tel:+31651355417",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "06 16 71 92 66",
-    href: "https://wa.me/31616719266?text=Hallo%2C%20ik%20heb%20een%20vraag%20over%20meubelstoffering.",
+    value: "+31 6 51355417",
+    href: "https://wa.me/31651355417?text=Hallo%2C%20ik%20heb%20een%20vraag%20over%20meubelstoffering.",
     isExternal: true,
   },
   {
