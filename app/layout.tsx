@@ -45,6 +45,9 @@ export const metadata: Metadata = {
     icon: [{ url: '/noord.png', type: 'image/png' }],
     apple: '/noord.png',
   },
+  verification: {
+    google: 'A9_56Gc09q_nV2vFtkz_PiqideKsCB1CBOHLGQLndXI',
+  },
 }
 
 export default function RootLayout({
