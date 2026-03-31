@@ -66,7 +66,7 @@ export function Header() {
                 )}
               >
                 <Phone className="h-4 w-4" />
-                +31 6 51355417
+                0651355417
               </Button>
             </a>
           </div>
@@ -107,7 +107,7 @@ export function Header() {
             <a href="tel:+31651355417">
               <Button className="w-full gap-2 bg-primary text-primary-foreground h-12 text-base">
                 <Phone className="h-5 w-5" />
-                +31 6 51355417
+                0651355417
               </Button>
             </a>
             <a 

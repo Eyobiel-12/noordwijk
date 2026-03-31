@@ -87,7 +87,7 @@ export function USPSection() {
                     size="lg" 
                     className="w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/90 h-12 sm:h-11 text-sm sm:text-base touch-manipulation"
                   >
-                    +31 6 51355417
+                    0651355417
                   </Button>
                 </a>
                 <Link href="#contact">

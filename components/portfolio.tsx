@@ -2,9 +2,34 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { ArrowRight, X } from "lucide-react"
+import { Check, Send, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { quoteServiceOptions } from "@/lib/quote-services"
+
+const beforeAfterPairs = [
+  {
+    id: "bank",
+    title: "Bank",
+    before: "/images/voor-bank.jpeg",
+    after: "/images/na-bank.jpeg",
+  },
+  {
+    id: "tafel",
+    title: "Tafel",
+    before: "/images/voortafle.jpeg",
+    after: "/images/na-tafel.jpeg",
+  },
+] as const
 
 const portfolioItems = [
   {
@@ -53,6 +78,45 @@ const portfolioItems = [
 
 export function Portfolio() {
   const [selectedItem, setSelectedItem] = useState<typeof portfolioItems[0] | null>(null)
+  const [quoteState, setQuoteState] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle")
+  const [quoteError, setQuoteError] = useState<string | null>(null)
+  const [serviceType, setServiceType] = useState<string>("")
+
+  const handleQuoteSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!serviceType) return
+    setQuoteError(null)
+    setQuoteState("submitting")
+    const form = e.currentTarget
+    const fd = new FormData(form)
+    try {
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          serviceType,
+          name: String(fd.get("name") ?? "").trim(),
+          phone: String(fd.get("phone") ?? "").trim(),
+          email: String(fd.get("email") ?? "").trim(),
+          details: String(fd.get("details") ?? "").trim(),
+        }),
+      })
+      const data = (await res.json().catch(() => ({}))) as { error?: string }
+      if (!res.ok) {
+        setQuoteError(data.error ?? "Verzenden mislukt. Probeer het later opnieuw.")
+        setQuoteState("idle")
+        return
+      }
+      setQuoteState("success")
+      form.reset()
+      setServiceType("")
+    } catch {
+      setQuoteError("Geen verbinding. Controleer uw internet en probeer opnieuw.")
+      setQuoteState("idle")
+    }
+  }
 
   return (
     <section id="portfolio" className="py-16 sm:py-20 lg:py-32 bg-muted">
@@ -70,6 +134,55 @@ export function Portfolio() {
           <p className="text-muted-foreground leading-relaxed max-w-md text-sm sm:text-base">
             Bekijk een selectie van onze recente projecten. Van klassieke restauraties tot moderne herstoffering.
           </p>
+        </div>
+
+        {/* Voor & na — lokale projectfoto's */}
+        <div className="mb-12 sm:mb-16 lg:mb-20">
+          <h3 className="font-serif text-xl sm:text-2xl md:text-3xl text-foreground mb-2 sm:mb-3 text-balance">
+            Voor &amp; na
+          </h3>
+          <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mb-8 sm:mb-10">
+            Het verschil dat vakmanschap maakt — van oude bekleding tot een fris resultaat.
+          </p>
+          <div className="space-y-10 sm:space-y-12 lg:space-y-14">
+            {beforeAfterPairs.map((pair) => (
+              <div key={pair.id}>
+                <h4 className="text-secondary text-xs sm:text-sm tracking-[0.2em] uppercase mb-4 sm:mb-5">
+                  {pair.title}
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
+                  <figure className="overflow-hidden rounded-lg sm:rounded-md ring-1 ring-border/30 shadow-sm bg-card">
+                    <div className="relative aspect-[4/5] w-full">
+                      <Image
+                        src={pair.before}
+                        alt={`${pair.title} — voor`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                    </div>
+                    <figcaption className="px-3 py-2.5 sm:px-4 sm:py-3 text-center text-xs sm:text-sm font-medium tracking-wide uppercase text-muted-foreground bg-muted/50">
+                      Voor
+                    </figcaption>
+                  </figure>
+                  <figure className="overflow-hidden rounded-lg sm:rounded-md ring-1 ring-border/30 shadow-sm bg-card">
+                    <div className="relative aspect-[4/5] w-full">
+                      <Image
+                        src={pair.after}
+                        alt={`${pair.title} — na`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                    </div>
+                    <figcaption className="px-3 py-2.5 sm:px-4 sm:py-3 text-center text-xs sm:text-sm font-medium tracking-wide uppercase text-secondary bg-muted/50">
+                      Na
+                    </figcaption>
+                  </figure>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Portfolio Grid */}
@@ -100,12 +213,122 @@ export function Portfolio() {
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-8 sm:mt-12">
-          <Button variant="outline" size="lg" className="gap-2 h-12 sm:h-11 px-6 sm:px-8 text-sm sm:text-base touch-manipulation">
-            Bekijk alle projecten
-            <ArrowRight className="w-4 h-4" />
-          </Button>
+        {/* Offerte — kies dienst + gegevens */}
+        <div className="mt-10 sm:mt-14 lg:mt-16 max-w-lg mx-auto">
+          <div className="rounded-xl sm:rounded-lg bg-card p-5 sm:p-6 lg:p-8 ring-1 ring-border/40 shadow-sm">
+            <h3 className="font-serif text-xl sm:text-2xl text-foreground text-center mb-1">
+              Vraag een offerte aan
+            </h3>
+            <p className="text-muted-foreground text-sm text-center mb-6 sm:mb-8">
+              Kies het type werk en laat kort weten wat u zoekt — wij reageren zo snel mogelijk.
+            </p>
+
+            {quoteState === "success" ? (
+              <div className="text-center py-6 sm:py-8">
+                <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                  <Check className="w-7 h-7 text-green-600" />
+                </div>
+                <h4 className="font-serif text-lg text-foreground mb-2">Offerte-aanvraag verstuurd</h4>
+                <p className="text-muted-foreground text-sm">
+                  We nemen contact met u op om de mogelijkheden door te nemen.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleQuoteSubmit} className="space-y-4 sm:space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="quote-service" className="text-foreground text-sm">
+                    Wat voor soort werk zoekt u? *
+                  </Label>
+                  <Select value={serviceType} onValueChange={setServiceType}>
+                    <SelectTrigger
+                      id="quote-service"
+                      className="w-full h-11 bg-background text-left"
+                    >
+                      <SelectValue placeholder="Selecteer een dienst" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {quoteServiceOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="quote-name" className="text-foreground text-sm">
+                      Naam *
+                    </Label>
+                    <Input
+                      id="quote-name"
+                      name="name"
+                      required
+                      placeholder="Uw naam"
+                      className="bg-background h-11"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="quote-phone" className="text-foreground text-sm">
+                      Telefoon
+                    </Label>
+                    <Input
+                      id="quote-phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="06 …"
+                      className="bg-background h-11"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="quote-email" className="text-foreground text-sm">
+                    E-mail *
+                  </Label>
+                  <Input
+                    id="quote-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="uw@email.nl"
+                    className="bg-background h-11"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="quote-details" className="text-foreground text-sm">
+                    Korte omschrijving (optioneel)
+                  </Label>
+                  <Textarea
+                    id="quote-details"
+                    name="details"
+                    rows={3}
+                    placeholder="Bijv. type meubel, stofwensen of gewenste planning…"
+                    className="bg-background resize-none text-sm"
+                  />
+                </div>
+                {quoteError ? (
+                  <p className="text-sm text-destructive" role="alert">
+                    {quoteError}
+                  </p>
+                ) : null}
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full gap-2 h-12 bg-primary text-primary-foreground touch-manipulation"
+                  disabled={quoteState === "submitting" || !serviceType}
+                >
+                  {quoteState === "submitting" ? (
+                    "Versturen…"
+                  ) : (
+                    <>
+                      Offerte aanvragen
+                      <Send className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
+          </div>
         </div>
       </div>
 

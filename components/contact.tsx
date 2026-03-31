@@ -11,13 +11,13 @@ const contactInfo = [
   {
     icon: Phone,
     label: "Telefoon",
-    value: "+31 6 51355417",
+    value: "0651355417",
     href: "tel:+31651355417",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+31 6 51355417",
+    value: "0651355417",
     href: "https://wa.me/31651355417?text=Hallo%2C%20ik%20heb%20een%20vraag%20over%20meubelstoffering.",
     isExternal: true,
   },
@@ -37,14 +37,41 @@ const contactInfo = [
 ]
 
 export function Contact() {
-  const [formState, setFormState] = useState<'idle' | 'submitting' | 'success'>('idle')
+  const [formState, setFormState] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle")
+  const [formError, setFormError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setFormState('submitting')
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setFormState('success')
+    setFormError(null)
+    setFormState("submitting")
+    const form = e.currentTarget
+    const fd = new FormData(form)
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: String(fd.get("name") ?? "").trim(),
+          phone: String(fd.get("phone") ?? "").trim(),
+          email: String(fd.get("email") ?? "").trim(),
+          subject: String(fd.get("subject") ?? "").trim(),
+          message: String(fd.get("message") ?? "").trim(),
+        }),
+      })
+      const data = (await res.json().catch(() => ({}))) as { error?: string }
+      if (!res.ok) {
+        setFormError(data.error ?? "Verzenden mislukt. Probeer het later opnieuw.")
+        setFormState("idle")
+        return
+      }
+      setFormState("success")
+      form.reset()
+    } catch {
+      setFormError("Geen verbinding. Controleer uw internet en probeer opnieuw.")
+      setFormState("idle")
+    }
   }
 
   return (
@@ -186,11 +213,16 @@ export function Contact() {
                     className="bg-background resize-none text-base sm:text-sm"
                   />
                 </div>
+                {formError ? (
+                  <p className="text-sm text-destructive" role="alert">
+                    {formError}
+                  </p>
+                ) : null}
                 <Button
                   type="submit"
                   size="lg"
                   className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2 h-12 sm:h-11 text-base sm:text-sm touch-manipulation"
-                  disabled={formState === 'submitting'}
+                  disabled={formState === "submitting"}
                 >
                   {formState === 'submitting' ? (
                     <>Versturen...</>

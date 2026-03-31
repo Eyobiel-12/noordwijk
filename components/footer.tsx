@@ -76,7 +76,7 @@ export function Footer() {
                   className="flex items-center gap-3 text-background/60 hover:text-secondary transition-colors text-sm py-1 touch-manipulation"
                 >
                   <Phone className="w-4 h-4" />
-                  +31 6 51355417
+                  0651355417
                 </a>
               </li>
               <li>
