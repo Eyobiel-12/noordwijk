@@ -1,8 +1,9 @@
-/** Zelfde mobiele nummer voor bellen, WhatsApp en op de site. */
-export const PHONE_DISPLAY = "06 51 35 54 17"
-/** Internationaal formaat voor tel:- en wa.me-links */
-export const PHONE_E164 = "+31651355417"
-/** Alleen cijfers voor WhatsApp (zonder +) */
+/** Vaste lijn (Noordwijk) — bellen */
+export const PHONE_DISPLAY = "071 20 32 521"
+export const PHONE_E164 = "+31712032521"
+
+/** Mobiel — alleen WhatsApp (wa.me) */
+export const WHATSAPP_DISPLAY = "06 51 35 54 17"
 export const WHATSAPP_INTERNATIONAL = "31651355417"
 
 export const telHref = `tel:${PHONE_E164}`

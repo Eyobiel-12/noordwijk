@@ -1,5 +1,10 @@
 import { getPublicSiteUrl } from "@/lib/site-url"
-import { PHONE_DISPLAY, telHref } from "@/lib/contact-constants"
+import {
+  PHONE_DISPLAY,
+  WHATSAPP_DISPLAY,
+  telHref,
+  whatsAppUrl,
+} from "@/lib/contact-constants"
 
 function escapeHtml(s: string): string {
   return s
@@ -75,6 +80,8 @@ ${content}
 <p style="margin:0 0 12px 0;font-size:13px;line-height:1.5;color:${BRAND_MUTED};font-family:system-ui,-apple-system,sans-serif;">${escapeHtml(opts.footerNote)}</p>
 <p style="margin:0;font-size:13px;font-family:system-ui,-apple-system,sans-serif;">
 <a href="${escapeHtml(telHref)}" style="color:${BRAND_HEADER};text-decoration:none;font-weight:600;">${escapeHtml(PHONE_DISPLAY)}</a>
+<span style="color:${BRAND_BORDER};"> &middot; </span>
+<a href="${escapeHtml(whatsAppUrl())}" style="color:${BRAND_HEADER};text-decoration:none;font-weight:600;">WhatsApp ${escapeHtml(WHATSAPP_DISPLAY)}</a>
 <span style="color:${BRAND_BORDER};"> &middot; </span>
 <a href="${escapeHtml(site)}" style="color:${BRAND_HEADER};text-decoration:underline;">Website</a>
 </p>

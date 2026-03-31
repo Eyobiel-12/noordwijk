@@ -6,7 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { PHONE_DISPLAY, telHref, whatsAppUrl } from "@/lib/contact-constants"
+import {
+  PHONE_DISPLAY,
+  WHATSAPP_DISPLAY,
+  telHref,
+  whatsAppUrl,
+} from "@/lib/contact-constants"
 
 const contactInfo = [
   {
@@ -18,7 +23,7 @@ const contactInfo = [
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: PHONE_DISPLAY,
+    value: WHATSAPP_DISPLAY,
     href: whatsAppUrl("Hallo, ik heb een vraag over meubelstoffering."),
     isExternal: true,
   },
@@ -236,6 +241,25 @@ export function Contact() {
                 </Button>
               </form>
             )}
+          </div>
+        </div>
+
+        <div className="mt-12 sm:mt-16 lg:mt-20 max-w-4xl mx-auto">
+          <h3 className="font-serif text-xl sm:text-2xl text-primary-foreground mb-2 text-center lg:text-left">
+            Locatie
+          </h3>
+          <p className="text-primary-foreground/60 text-sm mb-4 text-center lg:text-left">
+            Jonckersweg 21G - 174, 2201 DZ Noordwijk
+          </p>
+          <div className="rounded-lg sm:rounded-md overflow-hidden ring-1 ring-primary-foreground/15 shadow-[0_20px_50px_-20px_oklch(0.12_0.04_240_/_0.45)] bg-primary-foreground/5">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2476.5820795959557!2d4.436293700000001!3d52.2116013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5c18304c68789%3A0xfc988d7908b3c2c3!2sMeubelstoffeerderij%20Noordwijk!5e1!3m2!1sen!2snl!4v1774976456757!5m2!1sen!2snl"
+              title="Kaart: Meubelstoffeerderij Noordwijk, Jonckersweg 21G"
+              className="w-full h-[260px] sm:h-[360px] lg:h-[450px] border-0"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </div>

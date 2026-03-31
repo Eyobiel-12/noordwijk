@@ -1,7 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Check } from "lucide-react"
+import { ArrowRight, Check, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { PHONE_DISPLAY, telHref } from "@/lib/contact-constants"
 
 const features = [
   "Klassieke en moderne meubelstoffering",
@@ -62,15 +63,16 @@ export function Hero() {
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
-            <Link href="#portfolio">
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="w-full sm:w-auto border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-sm sm:text-base px-6 sm:px-8 h-12 sm:h-11 touch-manipulation"
+            <a href={telHref}>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto gap-2 border-primary-foreground/50 bg-background text-foreground hover:bg-primary-foreground/15 hover:text-foreground text-sm sm:text-base px-6 sm:px-8 h-12 sm:h-11 touch-manipulation"
               >
-                Bekijk ons werk
+                <Phone className="w-4 h-4 shrink-0" />
+                {PHONE_DISPLAY}
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </div>

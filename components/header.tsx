@@ -57,7 +57,7 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            <a href="tel:+31651355417">
+            <a href={telHref}>
               <Button
                 variant="outline"
                 size="sm"
@@ -67,7 +67,7 @@ export function Header() {
                 )}
               >
                 <Phone className="h-4 w-4" />
-                0651355417
+                {PHONE_DISPLAY}
               </Button>
             </a>
           </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Check, Send, X } from "lucide-react"
+import { ArrowRight, Check, Send, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,6 +15,65 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { quoteServiceOptions } from "@/lib/quote-services"
+import { cn } from "@/lib/utils"
+
+type PortfolioItem = {
+  id: number
+  image: string
+  title: string
+  category: string
+  description: string
+}
+
+function PortfolioTileButton({
+  item,
+  phase,
+  onSelect,
+}: {
+  item: PortfolioItem
+  phase: "voor" | "na"
+  onSelect: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={cn(
+        "group relative aspect-[5/6] sm:aspect-[5/6] lg:aspect-[4/5] w-full min-h-0 overflow-hidden rounded-lg sm:rounded-md bg-card cursor-pointer text-left touch-manipulation ring-1 ring-border/30 shadow-sm hover:shadow-md transition-shadow duration-300",
+        phase === "voor"
+          ? "col-start-1 row-start-1"
+          : "col-start-2 row-start-1 sm:col-start-3",
+      )}
+    >
+      <span
+        className={cn(
+          "absolute top-2 left-2 z-20 rounded px-2 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider shadow-sm",
+          phase === "voor"
+            ? "bg-background/95 text-muted-foreground ring-1 ring-border/60"
+            : "bg-secondary text-secondary-foreground",
+        )}
+      >
+        {phase === "voor" ? "Voor" : "Na"}
+      </span>
+      <Image
+        src={item.image}
+        alt={`${item.title} — ${phase}`}
+        fill
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        sizes="(max-width: 640px) 42vw, 320px"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent sm:from-primary/90 sm:via-primary/20 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 lg:p-6 sm:translate-y-4 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-all duration-300 pointer-events-none">
+        <span className="text-secondary text-[9px] sm:text-xs tracking-widest uppercase block">
+          {item.category}
+        </span>
+        <span className="font-serif text-xs sm:text-base lg:text-lg text-primary-foreground mt-0.5 line-clamp-2 block">
+          {item.title}
+        </span>
+      </div>
+    </button>
+  )
+}
 
 const beforeAfterPairs = [
   {
@@ -31,7 +90,7 @@ const beforeAfterPairs = [
   },
 ] as const
 
-const portfolioItems = [
+const portfolioItems: PortfolioItem[] = [
   {
     id: 1,
     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-2HVhKxDZr1Qne1lhC93GWRT2qM4N6f.png",
@@ -73,6 +132,28 @@ const portfolioItems = [
     title: "Zitkussen Renovatie",
     category: "Schuim Vernieuwing",
     description: "Professionele vernieuwing van zitkussen met nieuw schuim en hoogwaardige blauwe bekleding.",
+  },
+]
+
+/** Elke rij: links = voor, rechts = na (zelfde leesvolgorde als op mobiel). */
+const portfolioPairs: { id: string; title: string; before: PortfolioItem; after: PortfolioItem }[] = [
+  {
+    id: "design-fauteuil",
+    title: "Design fauteuil",
+    before: portfolioItems[0],
+    after: portfolioItems[1],
+  },
+  {
+    id: "ronde-stoelen",
+    title: "Ronde zitmeubelen",
+    before: portfolioItems[2],
+    after: portfolioItems[3],
+  },
+  {
+    id: "fauteuil-zitkussen",
+    title: "Fauteuil & zitkussen",
+    before: portfolioItems[4],
+    after: portfolioItems[5],
   },
 ]
 
@@ -132,50 +213,51 @@ export function Portfolio() {
             </h2>
           </div>
           <p className="text-muted-foreground leading-relaxed max-w-md text-sm sm:text-base">
-            Bekijk een selectie van onze recente projecten. Van klassieke restauraties tot moderne herstoffering.
+            Per rij ziet u hetzelfde traject: <strong className="text-foreground font-medium">links vóór</strong> herstoffering,{" "}
+            <strong className="text-foreground font-medium">rechts het resultaat erna</strong>. Tik op een foto voor meer uitleg.
           </p>
         </div>
 
         {/* Voor & na — lokale projectfoto's */}
-        <div className="mb-12 sm:mb-16 lg:mb-20">
+        <div className="mb-10 sm:mb-14 lg:mb-16">
           <h3 className="font-serif text-xl sm:text-2xl md:text-3xl text-foreground mb-2 sm:mb-3 text-balance">
             Voor &amp; na
           </h3>
-          <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mb-8 sm:mb-10">
+          <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mb-6 sm:mb-8">
             Het verschil dat vakmanschap maakt — van oude bekleding tot een fris resultaat.
           </p>
-          <div className="space-y-10 sm:space-y-12 lg:space-y-14">
+          <div className="space-y-8 sm:space-y-10 lg:space-y-12 max-w-2xl mx-auto">
             {beforeAfterPairs.map((pair) => (
               <div key={pair.id}>
-                <h4 className="text-secondary text-xs sm:text-sm tracking-[0.2em] uppercase mb-4 sm:mb-5">
+                <h4 className="text-secondary text-xs sm:text-sm tracking-[0.2em] uppercase mb-3 sm:mb-4">
                   {pair.title}
                 </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
                   <figure className="overflow-hidden rounded-lg sm:rounded-md ring-1 ring-border/30 shadow-sm bg-card">
-                    <div className="relative aspect-[4/5] w-full">
+                    <div className="relative aspect-[5/6] w-full">
                       <Image
                         src={pair.before}
                         alt={`${pair.title} — voor`}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 640px) 100vw, 50vw"
+                        sizes="(max-width: 640px) 90vw, 360px"
                       />
                     </div>
-                    <figcaption className="px-3 py-2.5 sm:px-4 sm:py-3 text-center text-xs sm:text-sm font-medium tracking-wide uppercase text-muted-foreground bg-muted/50">
+                    <figcaption className="px-3 py-2 sm:px-4 sm:py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide uppercase text-muted-foreground bg-muted/50">
                       Voor
                     </figcaption>
                   </figure>
                   <figure className="overflow-hidden rounded-lg sm:rounded-md ring-1 ring-border/30 shadow-sm bg-card">
-                    <div className="relative aspect-[4/5] w-full">
+                    <div className="relative aspect-[5/6] w-full">
                       <Image
                         src={pair.after}
                         alt={`${pair.title} — na`}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 640px) 100vw, 50vw"
+                        sizes="(max-width: 640px) 90vw, 360px"
                       />
                     </div>
-                    <figcaption className="px-3 py-2.5 sm:px-4 sm:py-3 text-center text-xs sm:text-sm font-medium tracking-wide uppercase text-secondary bg-muted/50">
+                    <figcaption className="px-3 py-2 sm:px-4 sm:py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide uppercase text-secondary bg-muted/50">
                       Na
                     </figcaption>
                   </figure>
@@ -185,31 +267,35 @@ export function Portfolio() {
           </div>
         </div>
 
-        {/* Portfolio Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-          {portfolioItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setSelectedItem(item)}
-              className="group relative aspect-[3/4] sm:aspect-[4/5] overflow-hidden rounded-lg sm:rounded-md bg-card cursor-pointer text-left touch-manipulation ring-1 ring-border/30 shadow-sm hover:shadow-md transition-shadow duration-300"
-            >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              {/* Always visible on mobile, hover on desktop */}
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent sm:from-primary/90 sm:via-primary/20 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 lg:p-6 sm:translate-y-4 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-all duration-300">
-                <span className="text-secondary text-[10px] sm:text-xs tracking-widest uppercase">
-                  {item.category}
-                </span>
-                <h3 className="font-serif text-sm sm:text-base lg:text-xl text-primary-foreground mt-0.5 sm:mt-1 line-clamp-2">
-                  {item.title}
-                </h3>
+        {/* Portfolio: voor / na per rij */}
+        <div className="space-y-7 sm:space-y-9 lg:space-y-10 max-w-3xl mx-auto">
+          {portfolioPairs.map((pair) => (
+            <div key={pair.id}>
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1 sm:gap-4 mb-2 sm:mb-3">
+                <h3 className="font-serif text-base sm:text-lg text-foreground">{pair.title}</h3>
+                <p className="text-[11px] sm:text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                  Voor · Na
+                </p>
               </div>
-            </button>
+              <div className="grid grid-cols-2 sm:grid-cols-[minmax(0,1fr)_2.25rem_minmax(0,1fr)] gap-2 sm:gap-1 lg:gap-2 items-stretch">
+                <PortfolioTileButton
+                  item={pair.before}
+                  phase="voor"
+                  onSelect={() => setSelectedItem(pair.before)}
+                />
+                <div
+                  className="hidden sm:flex col-start-2 row-start-1 items-center justify-center text-secondary pointer-events-none"
+                  aria-hidden
+                >
+                  <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6 shrink-0 opacity-90" />
+                </div>
+                <PortfolioTileButton
+                  item={pair.after}
+                  phase="na"
+                  onSelect={() => setSelectedItem(pair.after)}
+                />
+              </div>
+            </div>
           ))}
         </div>
 
