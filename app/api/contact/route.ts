@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import { buildContactEmailContent } from "@/lib/email-templates"
 import { getResendClient } from "@/lib/email-notify"
 
 const bodySchema = z.object({
@@ -37,17 +38,13 @@ export async function POST(request: Request) {
     ? `Contact: ${subject}`
     : `Contactformulier — ${name}`
 
-  const text = [
-    "Nieuw bericht via de website (contactformulier)",
-    "",
-    `Naam: ${name}`,
-    `E-mail: ${email}`,
-    phone ? `Telefoon: ${phone}` : "Telefoon: —",
-    subject ? `Onderwerp: ${subject}` : "Onderwerp: —",
-    "",
-    "Bericht:",
+  const { html, text } = buildContactEmailContent({
+    name,
+    phone,
+    email,
+    subject,
     message,
-  ].join("\n")
+  })
 
   const { data, error } = await cfg.resend.emails.send({
     from: cfg.from,
@@ -55,6 +52,7 @@ export async function POST(request: Request) {
     replyTo: email,
     subject: subjectLine,
     text,
+    html,
   })
 
   if (error) {

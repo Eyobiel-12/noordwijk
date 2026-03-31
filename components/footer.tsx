@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Phone, Mail, MapPin } from "lucide-react"
 import { Logo } from "@/components/logo"
+import { PHONE_DISPLAY, telHref } from "@/lib/contact-constants"
 
 const navLinks = [
   { href: "#diensten", label: "Diensten" },
@@ -71,12 +72,12 @@ export function Footer() {
             <h4 className="font-serif text-base sm:text-lg text-background mb-4 sm:mb-6">Contact</h4>
             <ul className="space-y-3 sm:space-y-4">
               <li>
-                <a 
-                  href="tel:+31651355417" 
+                <a
+                  href={telHref}
                   className="flex items-center gap-3 text-background/60 hover:text-secondary transition-colors text-sm py-1 touch-manipulation"
                 >
                   <Phone className="w-4 h-4" />
-                  0651355417
+                  {PHONE_DISPLAY}
                 </a>
               </li>
               <li>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import { buildQuoteEmailContent } from "@/lib/email-templates"
 import { getResendClient } from "@/lib/email-notify"
 import { QUOTE_SERVICE_VALUES, quoteServiceLabel } from "@/lib/quote-services"
 
@@ -35,16 +36,13 @@ export async function POST(request: Request) {
   }
 
   const serviceLabel = quoteServiceLabel(serviceType)
-  const text = [
-    "Nieuwe offerte-aanvraag via de website",
-    "",
-    `Soort werk: ${serviceLabel}`,
-    `Naam: ${name}`,
-    `E-mail: ${email}`,
-    phone ? `Telefoon: ${phone}` : "Telefoon: —",
-    "",
-    details ? `Toelichting:\n${details}` : "Toelichting: —",
-  ].join("\n")
+  const { html, text } = buildQuoteEmailContent({
+    serviceLabel,
+    name,
+    phone,
+    email,
+    details,
+  })
 
   const { data, error } = await cfg.resend.emails.send({
     from: cfg.from,
@@ -52,6 +50,7 @@ export async function POST(request: Request) {
     replyTo: email,
     subject: `Offerte-aanvraag — ${serviceLabel} (${name})`,
     text,
+    html,
   })
 
   if (error) {

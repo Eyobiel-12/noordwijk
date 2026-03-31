@@ -3,6 +3,7 @@
 import { Check, Truck, FileText, MessageSquare, Shield, Award, Leaf, Heart } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { PHONE_DISPLAY, telHref } from "@/lib/contact-constants"
 
 const usps = [
   {
@@ -82,19 +83,19 @@ export function USPSection() {
                 Wij denken graag met u mee over de mogelijkheden
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <a href="tel:+31651355417">
-                  <Button 
-                    size="lg" 
+                <a href={telHref}>
+                  <Button
+                    size="lg"
                     className="w-full sm:w-auto bg-secondary text-secondary-foreground hover:bg-secondary/90 h-12 sm:h-11 text-sm sm:text-base touch-manipulation"
                   >
-                    0651355417
+                    {PHONE_DISPLAY}
                   </Button>
                 </a>
                 <Link href="#contact">
-                  <Button 
-                    size="lg" 
+                  <Button
+                    size="lg"
                     variant="outline"
-                    className="w-full sm:w-auto border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 h-12 sm:h-11 text-sm sm:text-base touch-manipulation"
+                    className="w-full sm:w-auto border-primary-foreground/50 bg-background text-foreground hover:bg-primary-foreground/15 hover:text-foreground h-12 sm:h-11 text-sm sm:text-base touch-manipulation"
                   >
                     Stuur een bericht
                   </Button>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { DEFAULT_PUBLIC_SITE_URL } from '@/lib/site-url'
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({ 
@@ -12,13 +13,28 @@ const cormorant = Cormorant_Garamond({
 const inter = Inter({ 
   subsets: ["latin"],
   variable: '--font-sans'
-});
+})
+
+function siteMetadataBase(): URL {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+  if (raw) {
+    try {
+      return new URL(raw.endsWith("/") ? raw : `${raw}/`)
+    } catch {
+      /* fall through */
+    }
+  }
+  return new URL(`${DEFAULT_PUBLIC_SITE_URL}/`)
+}
 
 export const metadata: Metadata = {
+  metadataBase: siteMetadataBase(),
   title: 'Meubelstoffeerderij Noordwijk | Vakmanschap tot in Detail',
   description: 'Bij Meubelstoffeerderij Noordwijk staan kwaliteit, precisie en persoonlijke service centraal. Klassieke en moderne meubelstoffering, lederherstel en restauratie.',
   keywords: 'meubelstoffering, stoffeerderij, Noordwijk, lederherstel, meubel restauratie, upholstery',
   openGraph: {
+    url: DEFAULT_PUBLIC_SITE_URL,
+    siteName: 'Meubelstoffeerderij Noordwijk',
     title: 'Meubelstoffeerderij Noordwijk | Vakmanschap tot in Detail',
     description:
       'Klassieke en moderne meubelstoffering, lederherstel en restauratie — sinds 1985 in Noordwijk.',

@@ -6,19 +6,20 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { PHONE_DISPLAY, telHref, whatsAppUrl } from "@/lib/contact-constants"
 
 const contactInfo = [
   {
     icon: Phone,
     label: "Telefoon",
-    value: "0651355417",
-    href: "tel:+31651355417",
+    value: PHONE_DISPLAY,
+    href: telHref,
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "0651355417",
-    href: "https://wa.me/31651355417?text=Hallo%2C%20ik%20heb%20een%20vraag%20over%20meubelstoffering.",
+    value: PHONE_DISPLAY,
+    href: whatsAppUrl("Hallo, ik heb een vraag over meubelstoffering."),
     isExternal: true,
   },
   {

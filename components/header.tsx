@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Menu, X, Phone, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
+import { PHONE_DISPLAY, telHref, whatsAppUrl } from "@/lib/contact-constants"
 import { cn } from "@/lib/utils"
 
 const navLinks = [
@@ -104,14 +105,16 @@ export function Header() {
             </Link>
           ))}
           <div className="flex flex-col gap-3 mt-4">
-            <a href="tel:+31651355417">
+            <a href={telHref}>
               <Button className="w-full gap-2 bg-primary text-primary-foreground h-12 text-base">
                 <Phone className="h-5 w-5" />
-                0651355417
+                {PHONE_DISPLAY}
               </Button>
             </a>
-            <a 
-              href="https://wa.me/31651355417?text=Hallo%2C%20ik%20heb%20een%20vraag%20over%20meubelstoffering."
+            <a
+              href={whatsAppUrl(
+                "Hallo, ik heb een vraag over meubelstoffering.",
+              )}
               target="_blank"
               rel="noopener noreferrer"
             >
