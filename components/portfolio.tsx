@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { ArrowRight, Check, Send, X } from "lucide-react"
+import { Check, Send, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { quoteServiceOptions } from "@/lib/quote-services"
-import { cn } from "@/lib/utils"
+import { VoorNaComparison } from "@/components/voor-na-comparison"
 
 type PortfolioItem = {
   id: number
@@ -23,56 +23,6 @@ type PortfolioItem = {
   title: string
   category: string
   description: string
-}
-
-function PortfolioTileButton({
-  item,
-  phase,
-  onSelect,
-}: {
-  item: PortfolioItem
-  phase: "voor" | "na"
-  onSelect: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      className={cn(
-        "group relative aspect-[5/6] sm:aspect-[5/6] lg:aspect-[4/5] w-full min-h-0 overflow-hidden rounded-lg sm:rounded-md bg-card cursor-pointer text-left touch-manipulation ring-1 ring-border/30 shadow-sm hover:shadow-md transition-shadow duration-300",
-        phase === "voor"
-          ? "col-start-1 row-start-1"
-          : "col-start-2 row-start-1 sm:col-start-3",
-      )}
-    >
-      <span
-        className={cn(
-          "absolute top-2 left-2 z-20 rounded px-2 py-0.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wider shadow-sm",
-          phase === "voor"
-            ? "bg-background/95 text-muted-foreground ring-1 ring-border/60"
-            : "bg-secondary text-secondary-foreground",
-        )}
-      >
-        {phase === "voor" ? "Voor" : "Na"}
-      </span>
-      <Image
-        src={item.image}
-        alt={`${item.title} — ${phase}`}
-        fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-        sizes="(max-width: 640px) 42vw, 320px"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent sm:from-primary/90 sm:via-primary/20 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 lg:p-6 sm:translate-y-4 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-all duration-300 pointer-events-none">
-        <span className="text-secondary text-[9px] sm:text-xs tracking-widest uppercase block">
-          {item.category}
-        </span>
-        <span className="font-serif text-xs sm:text-base lg:text-lg text-primary-foreground mt-0.5 line-clamp-2 block">
-          {item.title}
-        </span>
-      </div>
-    </button>
-  )
 }
 
 const beforeAfterPairs = [
@@ -85,8 +35,8 @@ const beforeAfterPairs = [
   {
     id: "tafel",
     title: "Tafel",
-    before: "/images/voortafle.jpeg",
-    after: "/images/na-tafel.jpeg",
+    before: "/images/tafel-voor.jpeg",
+    after: "/images/tafelna.jpeg",
   },
 ] as const
 
@@ -107,10 +57,10 @@ const portfolioItems: PortfolioItem[] = [
   },
   {
     id: 3,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Lblw1KyeVxNQvaHtXT65Xe7tGxFlYA.png",
-    title: "Moderne Loungestoel",
-    category: "Design Stoffering",
-    description: "Hedendaagse ronde loungestoel in frisse limoengroene stof met chromen onderstel.",
+    image: "/images/tafel-voor.jpeg",
+    title: "Tafel — voor",
+    category: "Tafelstoffering",
+    description: "De tafel vóór herstoffering — oude bekleding en details zichtbaar.",
   },
   {
     id: 4,
@@ -128,14 +78,14 @@ const portfolioItems: PortfolioItem[] = [
   },
   {
     id: 6,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image.png-YuxaY4F6PiCIkqHepqQlOHKd9Vdc19.jpeg",
-    title: "Zitkussen Renovatie",
-    category: "Schuim Vernieuwing",
-    description: "Professionele vernieuwing van zitkussen met nieuw schuim en hoogwaardige blauwe bekleding.",
+    image: "/images/tafelna.jpeg",
+    title: "Tafel — na",
+    category: "Tafelstoffering",
+    description: "Hetzelfde meubel na herstoffering — fris materiaal en nette afwerking.",
   },
 ]
 
-/** Elke rij: links = voor, rechts = na (zelfde leesvolgorde als op mobiel). */
+/** Voor/na-paren: bewust gekoppeld op hetzelfde stuk meubel. */
 const portfolioPairs: { id: string; title: string; before: PortfolioItem; after: PortfolioItem }[] = [
   {
     id: "design-fauteuil",
@@ -144,15 +94,15 @@ const portfolioPairs: { id: string; title: string; before: PortfolioItem; after:
     after: portfolioItems[1],
   },
   {
-    id: "ronde-stoelen",
-    title: "Ronde zitmeubelen",
-    before: portfolioItems[2],
-    after: portfolioItems[3],
+    id: "draaifauteuil",
+    title: "Draaifauteuil",
+    before: portfolioItems[3],
+    after: portfolioItems[4],
   },
   {
-    id: "fauteuil-zitkussen",
-    title: "Fauteuil & zitkussen",
-    before: portfolioItems[4],
+    id: "tafel",
+    title: "Tafel",
+    before: portfolioItems[2],
     after: portfolioItems[5],
   },
 ]
@@ -213,8 +163,8 @@ export function Portfolio() {
             </h2>
           </div>
           <p className="text-muted-foreground leading-relaxed max-w-md text-sm sm:text-base">
-            Per rij ziet u hetzelfde traject: <strong className="text-foreground font-medium">links vóór</strong> herstoffering,{" "}
-            <strong className="text-foreground font-medium">rechts het resultaat erna</strong>. Tik op een foto voor meer uitleg.
+            <strong className="text-foreground font-medium">Sleep de lijn</strong> op elke foto om vóór en na te vergelijken.{" "}
+            Onder de projecten kunt u <strong className="text-foreground font-medium">uitleg vóór/na</strong> openen.
           </p>
         </div>
 
@@ -224,76 +174,59 @@ export function Portfolio() {
             Voor &amp; na
           </h3>
           <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mb-6 sm:mb-8">
-            Het verschil dat vakmanschap maakt — van oude bekleding tot een fris resultaat.
+            Sleep over de foto heen om het verschil te zien — hetzelfde stuk, vóór en na herstoffering.
           </p>
           <div className="space-y-8 sm:space-y-10 lg:space-y-12 max-w-2xl mx-auto">
             {beforeAfterPairs.map((pair) => (
-              <div key={pair.id}>
-                <h4 className="text-secondary text-xs sm:text-sm tracking-[0.2em] uppercase mb-3 sm:mb-4">
+              <figure key={pair.id} className="space-y-2">
+                <figcaption className="text-secondary text-xs sm:text-sm tracking-[0.2em] uppercase mb-1">
                   {pair.title}
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
-                  <figure className="overflow-hidden rounded-lg sm:rounded-md ring-1 ring-border/30 shadow-sm bg-card">
-                    <div className="relative aspect-[5/6] w-full">
-                      <Image
-                        src={pair.before}
-                        alt={`${pair.title} — voor`}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 90vw, 360px"
-                      />
-                    </div>
-                    <figcaption className="px-3 py-2 sm:px-4 sm:py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide uppercase text-muted-foreground bg-muted/50">
-                      Voor
-                    </figcaption>
-                  </figure>
-                  <figure className="overflow-hidden rounded-lg sm:rounded-md ring-1 ring-border/30 shadow-sm bg-card">
-                    <div className="relative aspect-[5/6] w-full">
-                      <Image
-                        src={pair.after}
-                        alt={`${pair.title} — na`}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 90vw, 360px"
-                      />
-                    </div>
-                    <figcaption className="px-3 py-2 sm:px-4 sm:py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide uppercase text-secondary bg-muted/50">
-                      Na
-                    </figcaption>
-                  </figure>
-                </div>
-              </div>
+                </figcaption>
+                <VoorNaComparison
+                  beforeSrc={pair.before}
+                  afterSrc={pair.after}
+                  beforeAlt={`${pair.title} — voor`}
+                  afterAlt={`${pair.title} — na`}
+                />
+              </figure>
             ))}
           </div>
         </div>
 
-        {/* Portfolio: voor / na per rij */}
-        <div className="space-y-7 sm:space-y-9 lg:space-y-10 max-w-3xl mx-auto">
+        {/* Portfolio: interactieve voor/na-vergelijking per project */}
+        <div className="space-y-8 sm:space-y-10 lg:space-y-12 max-w-2xl mx-auto">
           {portfolioPairs.map((pair) => (
             <div key={pair.id}>
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1 sm:gap-4 mb-2 sm:mb-3">
                 <h3 className="font-serif text-base sm:text-lg text-foreground">{pair.title}</h3>
                 <p className="text-[11px] sm:text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                  Voor · Na
+                  Sleep · vergelijk
                 </p>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-[minmax(0,1fr)_2.25rem_minmax(0,1fr)] gap-2 sm:gap-1 lg:gap-2 items-stretch">
-                <PortfolioTileButton
-                  item={pair.before}
-                  phase="voor"
-                  onSelect={() => setSelectedItem(pair.before)}
-                />
-                <div
-                  className="hidden sm:flex col-start-2 row-start-1 items-center justify-center text-secondary pointer-events-none"
-                  aria-hidden
+              <VoorNaComparison
+                beforeSrc={pair.before.image}
+                afterSrc={pair.after.image}
+                beforeAlt={`${pair.title} — voor`}
+                afterAlt={`${pair.title} — na`}
+              />
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs sm:text-sm">
+                <button
+                  type="button"
+                  onClick={() => setSelectedItem(pair.before)}
+                  className="text-muted-foreground underline underline-offset-4 decoration-border hover:text-foreground transition-colors touch-manipulation py-1"
                 >
-                  <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6 shrink-0 opacity-90" />
-                </div>
-                <PortfolioTileButton
-                  item={pair.after}
-                  phase="na"
-                  onSelect={() => setSelectedItem(pair.after)}
-                />
+                  Uitleg vóór
+                </button>
+                <span className="text-border select-none" aria-hidden>
+                  ·
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedItem(pair.after)}
+                  className="text-muted-foreground underline underline-offset-4 decoration-border hover:text-foreground transition-colors touch-manipulation py-1"
+                >
+                  Uitleg na
+                </button>
               </div>
             </div>
           ))}
@@ -435,12 +368,14 @@ export function Portfolio() {
             >
               <X className="w-5 h-5" />
             </button>
-            <div className="aspect-[4/5] sm:aspect-[16/10] relative flex-shrink-0">
+            <div className="aspect-[4/5] sm:aspect-[16/10] relative flex-shrink-0 max-h-[55vh] sm:max-h-[50vh]">
               <Image
                 src={selectedItem.image}
                 alt={selectedItem.title}
                 fill
+                quality={82}
                 className="object-cover"
+                sizes="(max-width: 640px) 100vw, 896px"
               />
             </div>
             <div className="p-5 sm:p-6 lg:p-8">

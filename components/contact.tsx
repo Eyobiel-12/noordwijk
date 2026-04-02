@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Phone, Mail, MapPin, Clock, Send, Check, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -41,6 +41,40 @@ const contactInfo = [
     isExternal: true,
   },
 ]
+
+const MAPS_EMBED_SRC =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2476.5820795959557!2d4.436293700000001!3d52.2116013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5c18304c68789%3A0xfc988d7908b3c2c3!2sMeubelstoffeerderij%20Noordwijk!5e1!3m2!1sen!2snl!4v1774976456757!5m2!1sen!2snl"
+
+/** Renders after mount so the iframe never participates in SSR hydration (avoids name/attr mismatches from embeds or extensions). */
+function GoogleMapsEmbed() {
+  const [ready, setReady] = useState(false)
+  useEffect(() => {
+    setReady(true)
+  }, [])
+
+  if (!ready) {
+    return (
+      <div
+        className="w-full h-[260px] sm:h-[360px] lg:h-[450px] border-0 bg-primary-foreground/10 flex items-center justify-center"
+        role="status"
+      >
+        <span className="sr-only">Kaart wordt geladen…</span>
+      </div>
+    )
+  }
+
+  return (
+    <iframe
+      src={MAPS_EMBED_SRC}
+      title="Kaart: Meubelstoffeerderij Noordwijk, Jonckersweg 21G"
+      className="w-full h-[260px] sm:h-[360px] lg:h-[450px] border-0"
+      allowFullScreen
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      name="noordwijk-locatie-kaart"
+    />
+  )
+}
 
 export function Contact() {
   const [formState, setFormState] = useState<
@@ -252,14 +286,7 @@ export function Contact() {
             Jonckersweg 21G - 174, 2201 DZ Noordwijk
           </p>
           <div className="rounded-lg sm:rounded-md overflow-hidden ring-1 ring-primary-foreground/15 shadow-[0_20px_50px_-20px_oklch(0.12_0.04_240_/_0.45)] bg-primary-foreground/5">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2476.5820795959557!2d4.436293700000001!3d52.2116013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5c18304c68789%3A0xfc988d7908b3c2c3!2sMeubelstoffeerderij%20Noordwijk!5e1!3m2!1sen!2snl!4v1774976456757!5m2!1sen!2snl"
-              title="Kaart: Meubelstoffeerderij Noordwijk, Jonckersweg 21G"
-              className="w-full h-[260px] sm:h-[360px] lg:h-[450px] border-0"
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+            <GoogleMapsEmbed />
           </div>
         </div>
       </div>
