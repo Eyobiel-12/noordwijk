@@ -29,14 +29,8 @@ const beforeAfterPairs = [
   {
     id: "bank",
     title: "Bank",
-    before: "/images/voor-bank.jpeg",
-    after: "/images/na-bank.jpeg",
-  },
-  {
-    id: "tafel",
-    title: "Tafel",
-    before: "/images/tafel-voor.jpeg",
-    after: "/images/tafelna.jpeg",
+    before: "/images/na-bank.jpeg",
+    after: "/images/voor-bank.jpeg",
   },
 ] as const
 
@@ -64,14 +58,14 @@ const portfolioItems: PortfolioItem[] = [
   },
   {
     id: 4,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-WwCxMJOIaH6QqZoZM18rotrzij3V38.png",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-IGJ88CGEwrw85PgzfDkMwJ6eGsTQhX.png",
     title: "Draaifauteuil Beige",
     category: "Luxe Herstoffering",
     description: "Luxueuze ronde draaifauteuil met hoogwaardige beige geweven stof - tijdloze elegantie.",
   },
   {
     id: 5,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-IGJ88CGEwrw85PgzfDkMwJ6eGsTQhX.png",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-WwCxMJOIaH6QqZoZM18rotrzij3V38.png",
     title: "Draaifauteuil Crème",
     category: "Luxe Herstoffering",
     description: "Elegante ronde draaifauteuil in crème wit met bijpassende sierkussens - pure luxe.",
@@ -82,6 +76,22 @@ const portfolioItems: PortfolioItem[] = [
     title: "Tafel — na",
     category: "Tafelstoffering",
     description: "Hetzelfde meubel na herstoffering — fris materiaal en nette afwerking.",
+  },
+  {
+    id: 7,
+    image: "/images/barkruk-voor.png",
+    title: "Barkruk — voor",
+    category: "Moderne Herstoffering",
+    description:
+      "Design barkruk met gat in de zitting, slijtage en vlekken — vóór herstoffering.",
+  },
+  {
+    id: 8,
+    image: "/images/barkruk-na.png",
+    title: "Barkruk — na",
+    category: "Moderne Herstoffering",
+    description:
+      "Dezelfde barkruk opnieuw gestoffeerd in fris limoengroen, met behoud van het ronde silhouet en chromen onderstel.",
   },
 ]
 
@@ -104,6 +114,12 @@ const portfolioPairs: { id: string; title: string; before: PortfolioItem; after:
     title: "Tafel",
     before: portfolioItems[2],
     after: portfolioItems[5],
+  },
+  {
+    id: "barkruk",
+    title: "Barkruk",
+    before: portfolioItems[6],
+    after: portfolioItems[7],
   },
 ]
 
